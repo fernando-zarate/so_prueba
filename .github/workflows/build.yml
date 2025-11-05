@@ -1,0 +1,55 @@
+name: Build (CMake + Conan)
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Cache Conan
+        uses: actions/cache@v4
+        with:
+          path: ~/.conan2
+          key: conan2-${{ runner.os }}-${{ hashFiles('conanfile.txt') }}
+          restore-keys: |
+            conan2-${{ runner.os }}-
+
+      - name: Install Conan
+        run: |
+          pip install --upgrade pip
+          pip install conan
+          conan --version
+          conan profile detect
+
+      - name: Conan install (Release)
+        run: |
+          mkdir -p build
+          conan install . --output-folder=build --build=missing --settings build_type=Release
+
+      # Usamos el preset que Conan creó: "conan-release"
+      - name: Configure (CMake preset)
+        run: cmake --preset conan-release
+
+      - name: Build
+        run: cmake --build --preset conan-release -j
+
+
+      # Subir el ejecutable como artefacto (ajustá la ruta si cambia)
+      - name: Upload artifact (binary)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: TP1_TuxLab
+          path: build/TP1_TuxLab
