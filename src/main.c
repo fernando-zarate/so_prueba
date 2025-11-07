@@ -1,44 +1,19 @@
 /**
  * @file main.c
- * @author fernando zarate
- * @brief this is a test code for TuxLab
- * @version 0.1
- * @date 2025-10-22
- *
- * @copyright Copyright (c) 2025
- *
+ * @brief Imprime el JSON por stdout.
  */
-#include <cjson/cJSON.h>
+#include "profile.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-/**
- * @brief Main entry point for the application.
- *
- * @return int
- */
 int main(void)
 {
-    /// @brief Create a JSON object representing a user profile
-    cJSON *profile = cJSON_CreateObject();
-
-    cJSON_AddStringToObject(profile, "name", "Fernando Zarate");
-    cJSON_AddNumberToObject(profile, "age", 25);
-    cJSON_AddBoolToObject(profile, "is_student", 1);
-
-    /// @brief Add an array of hobbies to the profile
-    cJSON *hobbies = cJSON_CreateArray();
-
-    cJSON_AddItemToArray(hobbies, cJSON_CreateString("Reading"));
-    cJSON_AddItemToArray(hobbies, cJSON_CreateString("Gaming"));
-
-    cJSON_AddItemToObject(profile, "hobbies", hobbies);
-
-    char *json_string = cJSON_Print(profile);
-    printf("%s\n", json_string);
-
-    cJSON_Delete(profile);
-    free(json_string);
-
-    return 0;
+  char *json = create_profile_json();
+  if (!json) {
+    fprintf(stderr, "Error: no se pudo crear el JSON.\n");
+    return 1;
+  }
+  printf("%s\n", json);
+  free(json);
+  return 0;
 }
