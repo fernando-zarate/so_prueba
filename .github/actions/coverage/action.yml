@@ -22,7 +22,7 @@ runs:
       COVERAGE_LOG=$PROJECT_PATH/coverage_output.txt
 
       # Run tests
-      ctest --test-dir build/Testing --output-on-failure -VV \
+      ctest --output-on-failure -VV \
         1> "$TEST_LOG" \
         2> "$TEST_ERRORS"
 
