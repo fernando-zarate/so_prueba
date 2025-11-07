@@ -19,6 +19,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 # Flags for compiling
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -Wall -Wpedantic -Wextra -Wconversion -Wunused-parameter -Wmissing-prototypes -Wstrict-prototypes -fhardened")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_options(--coverage -O0)
+  add_link_options(--coverage)
+endif()
 
 # Include headers
 include_directories(include)
