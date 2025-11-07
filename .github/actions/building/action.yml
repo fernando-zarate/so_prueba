@@ -39,7 +39,7 @@ runs:
         pip install --upgrade pip
         pip install conan
         conan --version
-        conan profile detect
+        conan profile detect --name default --force
 
     - name: Conan install (Release)
       shell: bash
