@@ -19,10 +19,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 # Flags for compiling
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -Wall -Wpedantic -Wextra -Wconversion -Wunused-parameter -Wmissing-prototypes -Wstrict-prototypes -fhardened")
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  add_compile_options(--coverage -O0)
-  add_link_options(--coverage)
-endif()
+
 
 # Include headers
 include_directories(include)
@@ -41,14 +38,11 @@ add_executable(${PROJECT_NAME}
 # Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE cjson::cjson)
 
-#Ejecutable de test con unity
-add_executable(test_profile
-            tests/test_profile.c
-            src/profile.c
-            )
 
-target_link_libraries(test_profile PRIVATE unity::unity cjson::cjson) # de esta forma unity solo esta en test
+# opcion para activar coverage
+option(RUN_COVERAGE "Build tests with coverage instrumentation" OFF)
 
-# Integracion con CTest
-add_test(NAME test_profile COMMAND test_profile)
+if(RUN_COVERAGE EQUAL 1)
+    add_subdirectory(tests)
+endif()
 
