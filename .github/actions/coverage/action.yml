@@ -16,7 +16,7 @@ runs:
     shell: bash
     run: |
       PROJECT_PATH=$(pwd)
-      BUILD_DIR="$PROJECT_PATH/build"   # <--- asumimos que ya existe y está configurado
+      BUILD_DIR="$PROJECT_PATH/build/Debug"   # <--- asumimos que ya existe y está configurado  # <--- ESTA es la carpeta del preset conan-debug
 
       TEST_LOG=$PROJECT_PATH/test_output.txt
       TEST_ERRORS=$PROJECT_PATH/test_errors.txt
