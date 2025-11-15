@@ -45,16 +45,16 @@ runs:
       shell: bash
       run: |
         mkdir -p build
-        conan install . --output-folder=build --build=missing --settings build_type=Release
+        conan install . --build=missing --settings build_type=Debug
 
     # Usamos el preset que Conan creó: "conan-release"
     - name: Configure (CMake preset)
       shell: bash
-      run: cmake --preset conan-release
+      run: cmake --preset conan-debug -DRUN_COVERAGE=1
 
     - name: Build
       shell: bash
-      run: cmake --build --preset conan-release -j
+      run: cmake --build --preset conan-debug -j
 
     # Subir el ejecutable como artefacto (ajustá la ruta si cambia)
 #    - name: Upload artifact (binary)
