@@ -16,13 +16,14 @@ runs:
     shell: bash
     run: |
       PROJECT_PATH=$(pwd)
+      BUILD_DIR="$PROJECT_PATH/build"   # <--- asumimos que ya existe y está configurado
 
       TEST_LOG=$PROJECT_PATH/test_output.txt
       TEST_ERRORS=$PROJECT_PATH/test_errors.txt
       COVERAGE_LOG=$PROJECT_PATH/coverage_output.txt
 
       # Run tests
-      ctest --output-on-failure -VV \
+      ctest --test-dir "$BUILD_DIR" --output-on-failure -VV \
         1> "$TEST_LOG" \
         2> "$TEST_ERRORS"
 
@@ -32,8 +33,8 @@ runs:
         exit 1
       fi
 
-      # Generate coverage
-      gcovr -r "$PROJECT_PATH" . > "$COVERAGE_LOG"
+      # Generate coverage: se ejecuta desde el root, mirando los .gcda de build/
+      gcovr -r "$PROJECT_PATH" "$BUILD_DIR" > "$COVERAGE_LOG"
 
       COVERAGE_RESULT=$(grep "TOTAL" "$COVERAGE_LOG" | awk '{print $NF}' | cut -d '%' -f 1)
 
